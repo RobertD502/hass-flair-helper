@@ -14,6 +14,7 @@ setuptools.setup(
     url='https://github.com/RobertD502/hass-flair-helper',
     keywords='flair, flair vents, flair api, flair home assistant',
     packages=setuptools.find_packages(),
+    install_requires=["flair-client==1.0.0"],
     classifiers=(
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
