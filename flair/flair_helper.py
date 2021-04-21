@@ -97,6 +97,9 @@ class FlairHelper:
         client = make_client(SESSION.client_id, SESSION.client_secret, 'https://api.flair.co/')
         return client.get(resource_type, id)
 
+    def structure_related_to_room(self, resource_type, id):
+        client = make_client(SESSION.client_id, SESSION.client_secret, 'https://api.flair.co/')
+        return client.get(resource_type, id)
 
     def control_vent(self, vent, resource_type, attributes, relationships):
         client = make_client(SESSION.client_id, SESSION.client_secret, 'https://api.flair.co/')
