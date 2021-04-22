@@ -17,32 +17,15 @@ class Vent(object):
         self.is_active = vent_state.attributes['inactive'] == False
         self.rssi = vent_state.attributes['current-rssi']
 
-    def set_vent_open(self):
+    def set_vent_percentage(self, percent):
         resource_type = 'vents'
         attributes = {
-        'percent-open': 100,
+        'percent-open': percent,
         }
         relationships = {}
         self.api.control_vent(self, resource_type, attributes, relationships)
         self.refresh()
 
-    def set_vent_closed(self):
-        resource_type = 'vents'
-        attributes = {
-        'percent-open': 0,
-        }
-        relationships = {}
-        self.api.control_vent(self, resource_type, attributes, relationships)
-        self.refresh()
-
-    def set_vent_half(self):
-        resource_type = 'vents'
-        attributes = {
-        'percent-open': 50,
-        }
-        relationships = {}
-        self.api.control_vent(self, resource_type, attributes, relationships)
-        self.refresh()
-
+#Vent available attributes
 #Office-Right
 #{'setup-lightstrip': 1, 'created-at': '2019-12-03T02:02:40.847808+00:00', 'voltage': 3.06, 'inactive': False, 'percent-open-reason': 'This room does not require heating. Vent will open when the room is below 67.0F.', 'updated-at': '2021-04-20T04:09:55.122649+00:00', 'percent-open': 0, 'name': 'Office-Right', 'has-buzzed': False, 'current-rssi': -87.0}
