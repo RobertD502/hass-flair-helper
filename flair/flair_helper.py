@@ -101,9 +101,22 @@ class FlairHelper:
         client = make_client(SESSION.client_id, SESSION.client_secret, 'https://api.flair.co/')
         return client.get(resource_type, id)
 
+    def get_schedules(self, id):
+        try:
+            client = make_client(SESSION.client_id, SESSION.client_secret, 'https://api.flair.co/')
+            current_structure = client.get('structures', id)
+            return current_structure.get_rel('schedules')
+        except:
+            return None
+
     def control_vent(self, vent, resource_type, attributes, relationships):
         client = make_client(SESSION.client_id, SESSION.client_secret, 'https://api.flair.co/')
         id = vent.vent_id
+        client.update(resource_type, id, attributes, relationships)
+
+    def control_schedule(self, structure, resource_type, attributes, relationships):
+        client = make_client(SESSION.client_id, SESSION.client_secret, 'https://api.flair.co/')
+        id = structure.structure_id
         client.update(resource_type, id, attributes, relationships)
 
     def control_room(self, room, resource_type, attributes, relationships):
