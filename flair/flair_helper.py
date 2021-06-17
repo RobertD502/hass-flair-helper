@@ -1,5 +1,7 @@
 import logging
 import time
+import requests
+import json
 import collections
 from flair_api import make_client
 
@@ -14,6 +16,7 @@ class FlairSession:
 
     client_id = ''
     client_secret = ''
+    bearer_token = ''
     structures = []
     vents = []
     pucks = []
@@ -22,16 +25,27 @@ class FlairSession:
 SESSION = FlairSession()
 
 class FlairHelper:
-    def __init__(self, client_id, client_secret):
+    def __init__(self, client_id, client_secret, bearer_token):
         SESSION.client_id = client_id
         SESSION.client_secret = client_secret
+        SESSION.bearer_token = bearer_token
         if client_id is None or client_secret is None:
             return None
         else:
+            self._authorize()
             self.discover_structures()
             self.discover_vents()
             self.discover_pucks()
             self.discover_rooms()
+
+    def _authorize(self):
+        headers = {
+        'Content-Type': 'application/x-www-form-urlencoded'
+        }
+        response = requests.post('https://api.flair.co/oauth/token?client_id=' + SESSION.client_id + '&client_secret=' + SESSION.client_secret +
+        '&scope=thermostats.view+vents.view+vents.edit+pucks.view+pucks.edit+structures.view+structures.edit&grant_type=client_credentials', headers=headers)
+        output = response.json()
+        SESSION.bearer_token = output['access_token']
 
     def structures(self):
         return SESSION.structures
@@ -68,6 +82,22 @@ class FlairHelper:
     def refresh_vents(self):
         for vent in SESSION.vents:
             vent.refresh()
+
+    def vent_current_reading(self, id):
+        headers = {
+        'Authorization': 'Bearer ' + SESSION.bearer_token
+        }
+        response = requests.get('https://api.flair.co/api/vents/' + id + '/current-reading', headers=headers)
+        output = response.json()
+        try:
+            error = output['errors'][0]['title']
+            if error == 'invalid_token':
+                self._authorize()
+                self.vent_current_reading(id)
+            else:
+                return None
+        except:
+            return output
 
     def discover_pucks(self):
         client = make_client(SESSION.client_id, SESSION.client_secret, 'https://api.flair.co/')
