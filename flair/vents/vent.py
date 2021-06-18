@@ -16,9 +16,12 @@ class Vent(object):
         self.vent_percent = vent_state.attributes['percent-open']
         self.is_active = vent_state.attributes['inactive'] == False
         self.rssi = vent_state.attributes['current-rssi']
-        vent_current_reading = self.api.vent_current_reading(self.vent_id)
-        self.duct_temp = vent_current_reading['data']['attributes']['duct-temperature-c']
-        self.duct_pressure = vent_current_reading['data']['attributes']['duct-pressure']
+        try:
+            vent_current_reading = self.api.vent_current_reading(self.vent_id)
+            self.duct_temp = vent_current_reading['data']['attributes']['duct-temperature-c']
+            self.duct_pressure = vent_current_reading['data']['attributes']['duct-pressure']
+        except:
+            return None
 
     def set_vent_percentage(self, percent):
         resource_type = 'vents'
