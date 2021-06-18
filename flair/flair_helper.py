@@ -25,10 +25,9 @@ class FlairSession:
 SESSION = FlairSession()
 
 class FlairHelper:
-    def __init__(self, client_id, client_secret, bearer_token):
+    def __init__(self, client_id, client_secret):
         SESSION.client_id = client_id
         SESSION.client_secret = client_secret
-        SESSION.bearer_token = bearer_token
         if client_id is None or client_secret is None:
             return None
         else:
