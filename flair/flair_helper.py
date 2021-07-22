@@ -3,7 +3,7 @@ import time
 import requests
 import json
 import collections
-from flair_api import make_client
+from flair_api import make_client, EmptyBodyException
 
 from flair.structures.structure import Structure
 from flair.vents.vent import Vent
@@ -60,10 +60,13 @@ class FlairHelper:
 
     def discover_structures(self):
         client = make_client(SESSION.client_id, SESSION.client_secret, 'https://api.flair.co/')
-        structures_list = client.get('structures')
         structures = []
-        for structure in structures_list.resources:
-            structures.append(Structure(structure, self))
+        try:
+            structures_list = client.get('structures')
+            for structure in structures_list.resources:
+                structures.append(Structure(structure, self))
+        except EmptyBodyException:
+            pass
         SESSION.structures = structures
 
     def refresh_structures(self):
@@ -72,10 +75,13 @@ class FlairHelper:
 
     def discover_vents(self):
         client = make_client(SESSION.client_id, SESSION.client_secret, 'https://api.flair.co/')
-        vents_list = client.get('vents')
         vents = []
-        for vent in vents_list.resources:
-            vents.append(Vent(vent, self))
+        try:
+            vents_list = client.get('vents')
+            for vent in vents_list.resources:
+                vents.append(Vent(vent, self))
+        except EmptyBodyException:
+            pass
         SESSION.vents = vents
 
     def refresh_vents(self):
@@ -100,10 +106,13 @@ class FlairHelper:
 
     def discover_pucks(self):
         client = make_client(SESSION.client_id, SESSION.client_secret, 'https://api.flair.co/')
-        pucks_list = client.get('pucks')
         pucks = []
-        for puck in pucks_list.resources:
-            pucks.append(Puck(puck, self))
+        try:
+            pucks_list = client.get('pucks')
+            for puck in pucks_list.resources:
+                pucks.append(Puck(puck, self))
+        except EmptyBodyException:
+            pass
         SESSION.pucks = pucks
 
     def refresh_pucks(self):
@@ -112,10 +121,13 @@ class FlairHelper:
 
     def discover_rooms(self):
         client = make_client(SESSION.client_id, SESSION.client_secret, 'https://api.flair.co/')
-        rooms_list = client.get('rooms')
         rooms = []
-        for room in rooms_list.resources:
-            rooms.append(Room(room, self))
+        try:
+            rooms_list = client.get('rooms')
+            for room in rooms_list.resources:
+                rooms.append(Room(room, self))
+        except EmptyBodyException:
+            pass
         SESSION.rooms = rooms
 
     def refresh_rooms(self):
