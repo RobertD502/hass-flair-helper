@@ -104,6 +104,22 @@ class FlairHelper:
         except:
             return output
 
+    def puck_light_level(self, id):
+        headers = {
+        'Authorization': 'Bearer ' + SESSION.bearer_token
+        }
+        response = requests.get('https://api.flair.co/api/pucks/' + id + '/current-reading', headers=headers)
+        output = response.json()
+        try:
+            error = output['errors'][0]['title']
+            if error == 'invalid_token':
+                self._authorize()
+                self.puck_light_level(id)
+            else:
+                return None
+        except:
+            return output
+        
     def discover_pucks(self):
         client = make_client(SESSION.client_id, SESSION.client_secret, 'https://api.flair.co/')
         pucks = []
