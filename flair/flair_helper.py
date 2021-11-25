@@ -18,6 +18,7 @@ class FlairSession:
     client_secret = ''
     bearer_token = ''
     structures = []
+    structure_ids = []    
     vents = []
     pucks = []
     rooms = []
@@ -61,13 +62,16 @@ class FlairHelper:
     def discover_structures(self):
         client = make_client(SESSION.client_id, SESSION.client_secret, 'https://api.flair.co/')
         structures = []
+        structure_ids = []
         try:
             structures_list = client.get('structures')
             for structure in structures_list.resources:
                 structures.append(Structure(structure, self))
+                structure_ids.append(structure.id_)
         except EmptyBodyException:
             pass
         SESSION.structures = structures
+        SESSION.structure_ids = structure_ids
 
     def refresh_structures(self):
         for structure in SESSION.structures:
@@ -141,7 +145,9 @@ class FlairHelper:
         try:
             rooms_list = client.get('rooms')
             for room in rooms_list.resources:
-                rooms.append(Room(room, self))
+                room_attributes = self.refresh_attributes('rooms', room.id_)
+                if (room_attributes.relationships['structure'].data['id'] in SESSION.structure_ids):
+                    rooms.append(Room(room, self))
         except EmptyBodyException:
             pass
         SESSION.rooms = rooms
