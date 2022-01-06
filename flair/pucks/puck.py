@@ -7,7 +7,7 @@ class Puck(object):
         self.api = api
         self.puck_id = data.id_
         self.puck_name = data.attributes['name']
-        self.light_level_available = None
+        self.light_level_available = False
         self.refresh()
 
     def refresh(self):
