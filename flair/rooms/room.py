@@ -30,8 +30,16 @@ class Room(object):
         self.api.control_room(self, resource_type, attributes, relationships)
         self.refresh()
 
+    def set_activity(self, active_inactive):
+        resource_type = 'rooms'
+        attributes = {
+        'active': active_inactive
+        }
+        relationships = {}
+        self.api.control_room(self, resource_type, attributes, relationships)
+        self.refresh()
 
-#Room attributes
+        #Room attributes
 #{'active': True, 'level': None, 'temp-away-max-c': 22.5, 'current-humidity': None, 'temp-away-min-c': 16.0, 'updated-at': '2021-04-20T03:49:16.417735+00:00', 'humidity-away-min': 10, 'room-type': None, 'frozen-pipe-pet-protect': True, 'created-at': '2019-12-03T02:04:43.105745+00:00', 'occupancy-mode': 'Flair Auto', 'current-temperature-c': 22.7778777777778, 'hold-until-schedule-event': False, 'pucks-inactive': 'Active', 'name': 'Guest Room', 'windows': None, 'set-point-c': 20.0, 'air-return': #False, 'preheat-precool': True, 'humidity-away-max': 80, 'hold-until': None, 'state-updated-at': '2021-04-20T03:33:52.004948+00:00', 'set-point-manual': False, 'room-away-mode': 'Smart Away', 'hold-reason': 'Set by Robert'}
 
 
