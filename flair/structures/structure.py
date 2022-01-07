@@ -16,23 +16,32 @@ class Structure(object):
         self.active_schedule = structure_state.attributes['active-schedule-id']
         try:
             structure_schedules = self.api.get_schedules(self.structure_id)
+
             """Get all schedules as dictionaries and place in a list"""
-            sl = []
+
+            self.schedules_list = []
+
+            """ Add No Schedule key in order to be able to set the structure schedule to No Schedule using the set_schedule function """
+
+            self.schedules_dictionary = {
+                "No Schedule": None,
+            }
+
             for schedule in structure_schedules.resources:
-                sl.append({
+                self.schedules_list.append({
                     schedule.attributes['name']: schedule.id_,
                 })
-            self.schedules_list = sl
+
             """Combine all the schedule dictionaries into a single dictionary"""
-            cs = {}
-            for dictc in sl:
-                cs.update(dictc)
-            self.combined_schedules = cs
+
+            for dictc in self.schedules_list:
+                self.schedules_dictionary.update(dictc)
+
         except AttributeError:
-            print("This structure doesn't have any attributes")
+            print("This structure doesn't have any schedules")
         except:
-            print("Something went wrong")
-    
+            print("Something went wrong while attempting to get Flair structure schedules")
+
     def set_schedule(self, schedule_id):
         resource_type = 'structures'
         attributes = {
