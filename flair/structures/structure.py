@@ -48,5 +48,15 @@ class Structure(object):
         'active-schedule-id': schedule_id,
         }
         relationships = {}
-        self.api.control_schedule(self, resource_type, attributes, relationships)
+        self.api.control_structure(self, resource_type, attributes, relationships)
+        self.refresh()
+
+    def set_structure_mode(self, mode):
+        """ Possible modes are heat, cool, auto, and float. Float means off """
+        resource_type = 'structures'
+        attributes = {
+        'structure-heat-cool-mode': mode,
+        }
+        relationships = {}
+        self.api.control_structure(self, resource_type, attributes, relationships)
         self.refresh()
