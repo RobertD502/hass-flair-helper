@@ -177,7 +177,7 @@ class FlairHelper:
         id = vent.vent_id
         client.update(resource_type, id, attributes, relationships)
 
-    def control_schedule(self, structure, resource_type, attributes, relationships):
+    def control_structure(self, structure, resource_type, attributes, relationships):
         client = make_client(SESSION.client_id, SESSION.client_secret, 'https://api.flair.co/')
         id = structure.structure_id
         client.update(resource_type, id, attributes, relationships)
