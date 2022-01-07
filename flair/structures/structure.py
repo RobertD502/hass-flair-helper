@@ -13,6 +13,7 @@ class Structure(object):
         structure_state = self.api.refresh_attributes('structures', self.structure_id)
         self.current_hvac_mode = structure_state.attributes['structure-heat-cool-mode']
         self.current_system_mode = structure_state.attributes['mode']
+        self.is_home = structure_state.attributes['home']
         self.relationships = structure_state.relationships
         self.active_schedule = structure_state.attributes['active-schedule-id']
         try:
@@ -67,6 +68,16 @@ class Structure(object):
         resource_type = 'structures'
         attributes = {
         'mode': system_mode,
+        }
+        relationships = {}
+        self.api.control_structure(self, resource_type, attributes, relationships)
+        self.refresh()
+
+    def set_home_away_mode(self, home_mode):
+        """ Home mode is True and Away mode is False """
+        resource_type = 'structures'
+        attributes = {
+        'home': home_mode,
         }
         relationships = {}
         self.api.control_structure(self, resource_type, attributes, relationships)
