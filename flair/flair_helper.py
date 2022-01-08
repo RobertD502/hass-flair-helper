@@ -9,6 +9,7 @@ from flair.structures.structure import Structure
 from flair.vents.vent import Vent
 from flair.pucks.puck import Puck
 from flair.rooms.room import Room
+from flair.hvac_units.hvac_unit import HvacUnit
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -22,6 +23,7 @@ class FlairSession:
     vents = []
     pucks = []
     rooms = []
+    hvac_units = []
 
 SESSION = FlairSession()
 
@@ -37,6 +39,7 @@ class FlairHelper:
             self.discover_vents()
             self.discover_pucks()
             self.discover_rooms()
+            self.discover_hvac_units()
 
     def _authorize(self):
         headers = {
@@ -58,6 +61,9 @@ class FlairHelper:
 
     def rooms(self):
         return SESSION.rooms
+
+    def hvac_units(self):
+        return SESSION.hvac_units
 
     def discover_structures(self):
         client = make_client(SESSION.client_id, SESSION.client_secret, 'https://api.flair.co/')
@@ -88,9 +94,27 @@ class FlairHelper:
             pass
         SESSION.vents = vents
 
+    def discover_hvac_units(self):
+        client = make_client(SESSION.client_id, SESSION.client_secret, 'https://api.flair.co/')
+        hvac_units = []
+        try:
+            hvac_list = client.get('hvac-units')
+            for hvac in hvac_list.resources:
+                hvac_units.append(HvacUnit(hvac, self))
+        except EmptyBodyException:
+            pass
+        SESSION.hvac_units = hvac_units
+
+    def control_hvac(self, id, power_state):
+        client = make_client(SESSION.client_id, SESSION.client_secret, 'https://api.flair.co/')
+        attributes = { "power": power_state }
+        client.update("hvac-units", id, attributes)
+
+
     def refresh_vents(self):
         for vent in SESSION.vents:
             vent.refresh()
+
 
     def vent_current_reading(self, id):
         headers = {
