@@ -9,6 +9,7 @@ from flair.structures.structure import Structure
 from flair.vents.vent import Vent
 from flair.pucks.puck import Puck
 from flair.rooms.room import Room
+from flair.hvac_units.hvac_unit import HvacUnit
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -22,6 +23,7 @@ class FlairSession:
     vents = []
     pucks = []
     rooms = []
+    hvac_units = []
 
 SESSION = FlairSession()
 
@@ -37,6 +39,7 @@ class FlairHelper:
             self.discover_vents()
             self.discover_pucks()
             self.discover_rooms()
+            self.discover_hvac_units()
 
     def _authorize(self):
         headers = {
@@ -58,6 +61,9 @@ class FlairHelper:
 
     def rooms(self):
         return SESSION.rooms
+
+    def hvac_units(self):
+        return SESSION.hvac_units
 
     def discover_structures(self):
         client = make_client(SESSION.client_id, SESSION.client_secret, 'https://api.flair.co/')
@@ -123,7 +129,7 @@ class FlairHelper:
                 return None
         except:
             return output
-        
+
     def discover_pucks(self):
         client = make_client(SESSION.client_id, SESSION.client_secret, 'https://api.flair.co/')
         pucks = []
@@ -156,6 +162,21 @@ class FlairHelper:
         for room in SESSION.rooms:
             room.refresh()
 
+    def discover_hvac_units(self):
+        client = make_client(SESSION.client_id, SESSION.client_secret, 'https://api.flair.co/')
+        hvac_units = []
+        try:
+            hvac_list = client.get('hvac-units')
+            for hvac in hvac_list.resources:
+                hvac_units.append(HvacUnit(hvac, self))
+        except EmptyBodyException:
+            pass
+        SESSION.hvac_units = hvac_units
+
+    def refresh_hvac_units(self):
+        for hvac_unit in SESSION.hvac_units:
+            hvac_unit.refresh()
+   
     def refresh_attributes(self, resource_type, id):
         client = make_client(SESSION.client_id, SESSION.client_secret, 'https://api.flair.co/')
         return client.get(resource_type, id)
@@ -185,6 +206,11 @@ class FlairHelper:
     def control_room(self, room, resource_type, attributes, relationships):
         client = make_client(SESSION.client_id, SESSION.client_secret, 'https://api.flair.co/')
         id = room.room_id
+        client.update(resource_type, id, attributes, relationships)
+
+    def control_hvac(self, hvac, resource_type, attributes, relationships):
+        client = make_client(SESSION.client_id, SESSION.client_secret, 'https://api.flair.co/')
+        id = hvac.hvac_id
         client.update(resource_type, id, attributes, relationships)
 
     def get_all_structures(self):
