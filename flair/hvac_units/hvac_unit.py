@@ -8,6 +8,8 @@ class HvacUnit(object):
 
     def refresh(self):
         hvac_state = self.api.refresh_attributes('hvac-units', self.hvac_id)
+        puck_state = self.api.refresh_attributes('pucks', hvac_state.relationships['puck'].data['id'])
+        self.puck_is_active = puck_state.attributes['inactive'] == False
         self.is_powered_on = (hvac_state.attributes['power'] == "On")
         self.hvac_mode = hvac_state.attributes['mode']
         self.hvac_temp = hvac_state.attributes['temperature']
