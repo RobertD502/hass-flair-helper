@@ -13,6 +13,20 @@ from flair.hvac_units.hvac_unit import HvacUnit
 
 _LOGGER = logging.getLogger(__name__)
 
+class FlairSession:
+
+    client_id = ''
+    client_secret = ''
+    bearer_token = ''
+    structures = []
+    structure_ids = []    
+    vents = []
+    pucks = []
+    rooms = []
+    hvac_units = []
+
+SESSION = FlairSession()
+
 class FlairHelper:
     def __init__(self, client_id, client_secret):
         SESSION.client_id = client_id
