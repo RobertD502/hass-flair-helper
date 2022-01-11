@@ -64,7 +64,7 @@ class HvacUnit(object):
     def set_hvac_power(self, power):
         resource_type = 'hvac-units'
         attributes = {
-        'power': power,
+        "power": power,
         }
         relationships = {}
         self.api.control_hvac(self, resource_type, attributes, relationships)
@@ -74,7 +74,7 @@ class HvacUnit(object):
     def set_hvac_mode(self, mode):
         resource_type = 'hvac-units'
         attributes = {
-        'mode': mode,
+        "mode": mode,
         }
         relationships = {}
         self.api.control_hvac(self, resource_type, attributes, relationships)
@@ -84,7 +84,7 @@ class HvacUnit(object):
     def set_hvac_swing(self, swing):
         resource_type = 'hvac-units'
         attributes = {
-        'swing': swing,
+        "swing": swing,
         }
         relationships = {}
         self.api.control_hvac(self, resource_type, attributes, relationships)
@@ -94,7 +94,7 @@ class HvacUnit(object):
     def set_hvac_fan_speed(self, speed):
         resource_type = 'hvac-units'
         attributes = {
-        'fan-speed': speed,
+        "fan-speed": speed,
         }
         relationships = {}
         self.api.control_hvac(self, resource_type, attributes, relationships)
@@ -105,7 +105,7 @@ class HvacUnit(object):
     def set_hvac_temp(self, temp):
         resource_type = 'hvac-units'
         attributes = {
-        'temperature': temp,
+        "temperature": temp,
         }
         relationships = {}
         self.api.control_hvac(self, resource_type, attributes, relationships)
