@@ -90,11 +90,31 @@ class HvacUnit(object):
         self.api.control_hvac(self, resource_type, attributes, relationships)
         self.refresh()
 
+    ### A Flair structure that is in Auto Mode needs a different method to change swing state. Valid swing inputs are True and False ###
+    def set_auto_structure_hvac_swing(self, swing):
+        resource_type = 'hvac-units'
+        attributes = {
+        "swing-auto": swing,
+        }
+        relationships = {}
+        self.api.control_hvac(self, resource_type, attributes, relationships)
+        self.refresh()        
+
     ### Fan speed can be High, Medium, Low, or Auto depending on unit's capabilities ###
     def set_hvac_fan_speed(self, speed):
         resource_type = 'hvac-units'
         attributes = {
         "fan-speed": speed,
+        }
+        relationships = {}
+        self.api.control_hvac(self, resource_type, attributes, relationships)
+        self.refresh()
+        
+    ### A Flair structure that is in Auto Mode needs a different method to change fan speed. Valid speeds are AUTO, HIGH, MEDIUM, and LOW ###
+    def set_auto_structure_hvac_fan_speed(self, speed):
+        resource_type = 'hvac-units'
+        attributes = {
+        "default-fan-speed": speed,
         }
         relationships = {}
         self.api.control_hvac(self, resource_type, attributes, relationships)
