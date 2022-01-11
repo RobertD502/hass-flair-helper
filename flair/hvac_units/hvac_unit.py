@@ -9,9 +9,12 @@ class HvacUnit(object):
     def refresh(self):
         hvac_state = self.api.refresh_attributes('hvac-units', self.hvac_id)
         puck_state = self.api.refresh_attributes('pucks', hvac_state.relationships['puck'].data['id'])
+        structure_state = self.api.refresh_attributes('structures', hvac_state.relationships['structure'].data['id'])
         self.puck_is_active = puck_state.attributes['inactive'] == False
         self.puck_temp = puck_state.attributes['current-temperature-c']
         self.puck_humidity = puck_state.attributes['current-humidity']
+        ### Check to see if the structure is in auto or manual mode
+        self.system_mode = structure_state.attributes['mode']
         self.is_powered_on = (hvac_state.attributes['power'] == "On")
         self.hvac_mode = hvac_state.attributes['mode']
         self.hvac_temp = hvac_state.attributes['temperature']
