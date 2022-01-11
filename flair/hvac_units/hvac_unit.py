@@ -48,7 +48,7 @@ class HvacUnit(object):
             for key in hvac_state.attributes['constraints']['ON']['DRY']['ON'].keys():
                 self.hvac_fan_speeds.append(key)
         if self.hvac_mode == "Auto":
-            for key in hvac_state.attributes['constraints']['ON']['Auto']['ON'].keys():
+            for key in hvac_state.attributes['constraints']['ON']['AUTO']['ON'].keys():
                 self.hvac_fan_speeds.append(key)
 
         ### Create list of supported HVAC temps in different modes ###
