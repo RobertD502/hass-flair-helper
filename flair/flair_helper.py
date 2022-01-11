@@ -19,7 +19,7 @@ class FlairSession:
     client_secret = ''
     bearer_token = ''
     structures = []
-    structure_ids = []    
+    structure_ids = []
     vents = []
     pucks = []
     rooms = []
@@ -48,6 +48,8 @@ class FlairHelper:
         response = requests.post('https://api.flair.co/oauth/token?client_id=' + SESSION.client_id + '&client_secret=' + SESSION.client_secret +
         '&scope=thermostats.view+vents.view+vents.edit+pucks.view+pucks.edit+structures.view+structures.edit&grant_type=client_credentials', headers=headers)
         output = response.json()
+        self.response_status = response.status_code
+        response.raise_for_status()
         SESSION.bearer_token = output['access_token']
 
     def structures(self):
@@ -176,7 +178,7 @@ class FlairHelper:
     def refresh_hvac_units(self):
         for hvac_unit in SESSION.hvac_units:
             hvac_unit.refresh()
-   
+
     def refresh_attributes(self, resource_type, id):
         client = make_client(SESSION.client_id, SESSION.client_secret, 'https://api.flair.co/')
         return client.get(resource_type, id)
@@ -224,3 +226,4 @@ class FlairHelper:
 
     def get_all_rooms(self):
         return SESSION.rooms
+
