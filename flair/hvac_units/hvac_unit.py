@@ -35,8 +35,20 @@ class HvacUnit(object):
 
         ### Create list of supported fan speeds ###
         self.hvac_fan_speeds = []
-        if 'FAN' in self.hvac_modes:
+        if self.hvac_mode == "Heat":
+            for key in hvac_state.attributes['constraints']['ON']['HEAT']['ON'].keys():
+                self.hvac_fan_speeds.append(key)
+        if self.hvac_mode == "Cool":
+            for key in hvac_state.attributes['constraints']['ON']['COOL']['ON'].keys():
+                self.hvac_fan_speeds.append(key)
+        if self.hvac_mode == "Fan":
             for key in hvac_state.attributes['constraints']['ON']['FAN']['ON'].keys():
+                self.hvac_fan_speeds.append(key)
+        if self.hvac_mode == "Dry":
+            for key in hvac_state.attributes['constraints']['ON']['DRY']['ON'].keys():
+                self.hvac_fan_speeds.append(key)
+        if self.hvac_mode == "Auto":
+            for key in hvac_state.attributes['constraints']['ON']['Auto']['ON'].keys():
                 self.hvac_fan_speeds.append(key)
 
         ### Create list of supported HVAC temps in different modes ###
@@ -58,7 +70,7 @@ class HvacUnit(object):
         self.api.control_hvac(self, resource_type, attributes, relationships)
         self.refresh()
 
-    ### Mode can be Dry, Heat, Cool, or Fan depending on unit's capabilities ###
+    ### Mode can be Dry, Heat, Cool, Fan, or Auto depending on unit's capabilities ###
     def set_hvac_mode(self, mode):
         resource_type = 'hvac-units'
         attributes = {
