@@ -31,6 +31,7 @@ class FlairHelper:
     def __init__(self, client_id, client_secret):
         SESSION.client_id = client_id
         SESSION.client_secret = client_secret
+        self.response_status = None
         if client_id is None or client_secret is None:
             return None
         else:
