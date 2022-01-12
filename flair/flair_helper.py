@@ -31,7 +31,6 @@ class FlairHelper:
     def __init__(self, client_id, client_secret):
         SESSION.client_id = client_id
         SESSION.client_secret = client_secret
-        self.response_status = None
         if client_id is None or client_secret is None:
             return None
         else:
@@ -52,7 +51,6 @@ class FlairHelper:
         self.response_status = response.status_code
         response.raise_for_status()
         SESSION.bearer_token = output['access_token']
-        return self.response_status
 
     def structures(self):
         return SESSION.structures
