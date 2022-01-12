@@ -52,6 +52,7 @@ class FlairHelper:
         self.response_status = response.status_code
         response.raise_for_status()
         SESSION.bearer_token = output['access_token']
+        return self.response_status
 
     def structures(self):
         return SESSION.structures
