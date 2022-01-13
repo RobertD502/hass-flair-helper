@@ -4,6 +4,7 @@ class HvacUnit(object):
         self.hvac_id = data.id_
         self.hvac_model = data.attributes['make-name']
         self.hvac_name = data.attributes['name']
+        self.room_id = data.relationships['room'].data['id']
         self.refresh()
 
     def refresh(self):
@@ -137,3 +138,14 @@ class HvacUnit(object):
         relationships = {}
         self.api.control_hvac(self, resource_type, attributes, relationships)
         self.refresh()
+
+    ### The setpoint can only be changed when structure is in manual mode. When in auto mode, the room set-point needs to be changed ###
+    def set_auto_hvac_temp(self, temp):
+        resource_type = 'rooms'
+        attributes = {
+        'set-point-c': temp,
+        'active': True
+        }
+        relationships = {}
+        self.api.control_room(self, resource_type, attributes, relationships)
+        self.refresh()        
