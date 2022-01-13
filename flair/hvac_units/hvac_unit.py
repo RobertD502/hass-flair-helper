@@ -1,4 +1,6 @@
 class HvacUnit(object):
+    RESOURCE_TYPE = 'hvac-units'
+
     def __init__(self, data, api):
         self.api = api
         self.hvac_id = data.id_
@@ -70,71 +72,64 @@ class HvacUnit(object):
 
     ### Power can be either On or Off ###
     def set_hvac_power(self, power):
-        resource_type = 'hvac-units'
         attributes = {
         "power": power,
         }
         relationships = {}
-        self.api.control_hvac(self, resource_type, attributes, relationships)
+        self.api.control_hvac(self, HvacUnit.RESOURCE_TYPE, attributes, relationships)
         self.refresh()
 
     ### Mode can be Dry, Heat, Cool, Fan, or Auto depending on unit's capabilities ###
     def set_hvac_mode(self, mode):
-        resource_type = 'hvac-units'
         attributes = {
         "mode": mode,
         }
         relationships = {}
-        self.api.control_hvac(self, resource_type, attributes, relationships)
+        self.api.control_hvac(self, HvacUnit.RESOURCE_TYPE, attributes, relationships)
         self.refresh()
 
     ### Swing can be On or Off if unit supports swing feature ###
     def set_hvac_swing(self, swing):
-        resource_type = 'hvac-units'
         attributes = {
         "swing": swing,
         }
         relationships = {}
-        self.api.control_hvac(self, resource_type, attributes, relationships)
+        self.api.control_hvac(self, HvacUnit.RESOURCE_TYPE, attributes, relationships)
         self.refresh()
 
     ### A Flair structure that is in Auto Mode needs a different method to change swing state. Valid swing inputs are True and False ###
     def set_auto_structure_hvac_swing(self, swing):
-        resource_type = 'hvac-units'
         attributes = {
         "swing-auto": swing,
         }
         relationships = {}
-        self.api.control_hvac(self, resource_type, attributes, relationships)
+        self.api.control_hvac(self, HvacUnit.RESOURCE_TYPE, attributes, relationships)
         self.refresh()        
 
     ### Fan speed can be High, Medium, Low, or Auto depending on unit's capabilities ###
     def set_hvac_fan_speed(self, speed):
-        resource_type = 'hvac-units'
         attributes = {
         "fan-speed": speed,
         }
         relationships = {}
-        self.api.control_hvac(self, resource_type, attributes, relationships)
+        self.api.control_hvac(self, HvacUnit.RESOURCE_TYPE, attributes, relationships)
         self.refresh()
         
     ### A Flair structure that is in Auto Mode needs a different method to change fan speed. Valid speeds are AUTO, HIGH, MEDIUM, and LOW ###
     def set_auto_structure_hvac_fan_speed(self, speed):
-        resource_type = 'hvac-units'
         attributes = {
         "default-fan-speed": speed,
         }
         relationships = {}
-        self.api.control_hvac(self, resource_type, attributes, relationships)
+        self.api.control_hvac(self, HvacUnit.RESOURCE_TYPE, attributes, relationships)
         self.refresh()
 
     ### Temperature sent should fall in the range seen in self.supported_heat_temps if in heat mode and
     ### in the range seen in self.supported_cool_temps if in cool mode
     def set_hvac_temp(self, temp):
-        resource_type = 'hvac-units'
         attributes = {
         "temperature": temp,
         }
         relationships = {}
-        self.api.control_hvac(self, resource_type, attributes, relationships)
+        self.api.control_hvac(self, HvacUnit.RESOURCE_TYPE, attributes, relationships)
         self.refresh()
