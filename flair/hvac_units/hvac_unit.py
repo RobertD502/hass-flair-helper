@@ -59,13 +59,14 @@ class HvacUnit(object):
                 self.hvac_fan_speeds.append(key)
 
         ### Create list of supported HVAC temps in different modes ###
+        fan_key = f"FAN {self.hvac_fan_speed.upper()}"
         if self.hvac_capabilities == "Both":
-            self.supported_heat_temps = next(iter(hvac_state.attributes['constraints']['ON']['HEAT']['ON'].values()))
-            self.supported_cool_temps = next(iter(hvac_state.attributes['constraints']['ON']['COOL']['OFF'].values()))
+            self.supported_heat_temps = next(iter(hvac_state.attributes['constraints']['ON']['HEAT'][fan_key]['ON'].values()))
+            self.supported_cool_temps = next(iter(hvac_state.attributes['constraints']['ON']['COOL'][fan_key]['OFF'].values()))
         elif self.hvac_capabilities == "Heat":
-            self.supported_heat_temps = next(iter(hvac_state.attributes['constraints']['ON']['HEAT']['ON'].values()))
+            self.supported_heat_temps = next(iter(hvac_state.attributes['constraints']['ON']['HEAT'][fan_key]['ON'].values()))
         else:
-            self.supported_cool_temps = next(iter(hvac_state.attributes['constraints']['ON']['COOL']['OFF'].values()))
+            self.supported_cool_temps = next(iter(hvac_state.attributes['constraints']['ON']['COOL'][fan_key]['OFF'].values()))
 
     ### Power can be either On or Off ###
     def set_hvac_power(self, power):
