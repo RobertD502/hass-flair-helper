@@ -18,7 +18,11 @@ class HvacUnit(object):
         self.is_powered_on = (hvac_state.attributes['power'] == "On")
         self.hvac_mode = hvac_state.attributes['mode']
         self.hvac_temp = hvac_state.attributes['temperature']
-        self.hvac_temp_scale = hvac_state.attributes['constraints']['temperature-scale']
+        ### Check to see if HVAC constraints has temperature-scale key, if not then use scale from structure ###
+        if "temperature-scale" in hvac_state.attributes['constraints']:
+            self.hvac_temp_scale = hvac_state.attributes['constraints']['temperature-scale']
+        else:
+            self.hvac_temp_scale = structure_state.attributes['temperature-scale']
         self.hvac_fan_speed = hvac_state.attributes['fan-speed']
 
         ### Check to See if HVAC Unit Supports Setting Swing On and Off ###
