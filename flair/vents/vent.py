@@ -1,6 +1,6 @@
 import time
 import collections
-
+from ..resource_types import VENTS
 
 class Vent(object):
     def __init__(self, data, api):
@@ -10,7 +10,7 @@ class Vent(object):
         self.refresh()
 
     def refresh(self):
-        vent_state = self.api.refresh_attributes('vents', self.vent_id)
+        vent_state = self.api.refresh_attributes(VENTS, self.vent_id)
         self.voltage = vent_state.attributes['voltage']
         self.is_vent_open = vent_state.attributes['percent-open'] == 100 or vent_state.attributes['percent-open'] == 50
         self.vent_percent = vent_state.attributes['percent-open']
@@ -24,12 +24,11 @@ class Vent(object):
             return None
 
     def set_vent_percentage(self, percent):
-        resource_type = 'vents'
         attributes = {
         'percent-open': percent,
         }
         relationships = {}
-        self.api.control_vent(self, resource_type, attributes, relationships)
+        self.api.control_vent(self, VENTS, attributes, relationships)
         self.refresh()
 
 #Vent available attributes
