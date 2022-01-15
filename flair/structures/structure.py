@@ -1,6 +1,6 @@
 import time
 import collections
-
+from ..resource_types import STRUCTURES
 
 class Structure(object):
     def __init__(self, data, api):
@@ -10,7 +10,7 @@ class Structure(object):
         self.refresh()
 
     def refresh(self):
-        structure_state = self.api.refresh_attributes('structures', self.structure_id)
+        structure_state = self.api.refresh_attributes(STRUCTURES, self.structure_id)
         self.current_hvac_mode = structure_state.attributes['structure-heat-cool-mode']
         self.current_system_mode = structure_state.attributes['mode']
         self.is_home = structure_state.attributes['home']
@@ -45,40 +45,36 @@ class Structure(object):
             print("Something went wrong while attempting to get Flair structure schedules")
 
     def set_schedule(self, schedule_id):
-        resource_type = 'structures'
         attributes = {
         'active-schedule-id': schedule_id,
         }
         relationships = {}
-        self.api.control_structure(self, resource_type, attributes, relationships)
+        self.api.control_structure(self, STRUCTURES, attributes, relationships)
         self.refresh()
 
     def set_structure_mode(self, hvac_mode):
         """ Possible HVAC modes are heat, cool, auto, and float. Float means off """
-        resource_type = 'structures'
         attributes = {
         'structure-heat-cool-mode': hvac_mode,
         }
         relationships = {}
-        self.api.control_structure(self, resource_type, attributes, relationships)
+        self.api.control_structure(self, STRUCTURES, attributes, relationships)
         self.refresh()
 
     def set_system_mode(self, system_mode):
         """ Possible System modes are auto and manual """
-        resource_type = 'structures'
         attributes = {
         'mode': system_mode,
         }
         relationships = {}
-        self.api.control_structure(self, resource_type, attributes, relationships)
+        self.api.control_structure(self, STRUCTURES, attributes, relationships)
         self.refresh()
 
     def set_home_away_mode(self, home_mode):
         """ Home mode is True and Away mode is False """
-        resource_type = 'structures'
         attributes = {
         'home': home_mode,
         }
         relationships = {}
-        self.api.control_structure(self, resource_type, attributes, relationships)
+        self.api.control_structure(self, STRUCTURES, attributes, relationships)
         self.refresh()
