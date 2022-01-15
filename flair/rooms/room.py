@@ -1,5 +1,6 @@
 import time
 import collections
+from ..resource_types import ROOMS, STRUCTURES
 
 class Room(object):
     def __init__(self, data, api):
@@ -9,34 +10,32 @@ class Room(object):
         self.refresh()
 
     def refresh(self):
-        room_state = self.api.refresh_attributes('rooms', self.room_id)
+        room_state = self.api.refresh_attributes(ROOMS, self.room_id)
         self.temp_set_point = room_state.attributes['set-point-c']
         self.current_temp = room_state.attributes['current-temperature-c']
         self.current_humidity = room_state.attributes['current-humidity']
         self.is_active = room_state.attributes['active'] == True
         self.related_structure_id = room_state.relationships['structure'].data['id']
-        room_related = self.api.structure_related_to_room('structures', self.related_structure_id)
+        room_related = self.api.structure_related_to_room(STRUCTURES, self.related_structure_id)
         self.current_hvac_mode = room_related.attributes['structure-heat-cool-mode']
         self.hold_duration = room_related.attributes['default-hold-duration']
 
 
     def set_temperature(self, temp):
-        resource_type = 'rooms'
         attributes = {
         'set-point-c': temp,
         'active': True
         }
         relationships = {}
-        self.api.control_room(self, resource_type, attributes, relationships)
+        self.api.control_room(self, ROOMS, attributes, relationships)
         self.refresh()
 
     def set_activity(self, active_inactive):
-        resource_type = 'rooms'
         attributes = {
         'active': active_inactive
         }
         relationships = {}
-        self.api.control_room(self, resource_type, attributes, relationships)
+        self.api.control_room(self, ROOMS, attributes, relationships)
         self.refresh()
 
         #Room attributes
