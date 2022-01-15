@@ -1,0 +1,5 @@
+HVAC_UNITS = "hvac-units"
+PUCKS = "pucks"
+ROOMS = "rooms"
+STRUCTURES = "structures"
+VENTS = "vents"
