@@ -170,7 +170,8 @@ class FlairHelper:
         try:
             hvac_list = client.get('hvac-units')
             for hvac in hvac_list.resources:
-                hvac_units.append(HvacUnit(hvac, self))
+                if hvac.attributes['model-id'] is not None:
+                    hvac_units.append(HvacUnit(hvac, self))
         except EmptyBodyException:
             pass
         SESSION.hvac_units = hvac_units
