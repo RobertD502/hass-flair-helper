@@ -153,8 +153,7 @@ class FlairHelper:
         try:
             rooms_list = client.get('rooms')
             for room in rooms_list.resources:
-                room_attributes = self.refresh_attributes('rooms', room.id_)
-                if (room_attributes.relationships['structure'].data['id'] in SESSION.structure_ids):
+                if (room.relationships['structure'].data['id'] in SESSION.structure_ids):
                     rooms.append(Room(room, self))
         except EmptyBodyException:
             pass
