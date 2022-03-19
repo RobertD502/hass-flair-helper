@@ -87,20 +87,40 @@ class HvacUnit(object):
         ### Create list of supported fan speeds ###
         self.hvac_fan_speeds = []
         if self.hvac_mode == "Heat":
-            for key in hvac_state.attributes['constraints']['ON']['HEAT']['ON'].keys():
-                self.hvac_fan_speeds.append(key)
+            if "ON" in hvac_state.attributes['constraints']['ON']['HEAT'].keys():
+                for key in hvac_state.attributes['constraints']['ON']['HEAT']['ON'].keys():
+                    self.hvac_fan_speeds.append(key)
+            else:
+                for key in hvac_state.attributes['constraints']['ON']['HEAT']['OFF'].keys():
+                    self.hvac_fan_speeds.append(key)
         if self.hvac_mode == "Cool":
-            for key in hvac_state.attributes['constraints']['ON']['COOL']['ON'].keys():
-                self.hvac_fan_speeds.append(key)
+            if "ON" in hvac_state.attributes['constraints']['ON']['COOL'].keys():
+                for key in hvac_state.attributes['constraints']['ON']['COOL']['ON'].keys():
+                    self.hvac_fan_speeds.append(key)
+            else:
+                for key in hvac_state.attributes['constraints']['ON']['COOL']['OFF'].keys():
+                    self.hvac_fan_speeds.append(key)
         if self.hvac_mode == "Fan":
-            for key in hvac_state.attributes['constraints']['ON']['FAN']['ON'].keys():
-                self.hvac_fan_speeds.append(key)
+            if "ON" in hvac_state.attributes['constraints']['ON']['FAN'].keys():
+                for key in hvac_state.attributes['constraints']['ON']['FAN']['ON'].keys():
+                    self.hvac_fan_speeds.append(key)
+            else:
+                for key in hvac_state.attributes['constraints']['ON']['FAN']['OFF'].keys():
+                    self.hvac_fan_speeds.append(key)
         if self.hvac_mode == "Dry":
-            for key in hvac_state.attributes['constraints']['ON']['DRY']['ON'].keys():
-                self.hvac_fan_speeds.append(key)
+            if "ON" in hvac_state.attributes['constraints']['ON']['DRY'].keys():
+                for key in hvac_state.attributes['constraints']['ON']['DRY']['ON'].keys():
+                    self.hvac_fan_speeds.append(key)
+            else:
+                for key in hvac_state.attributes['constraints']['ON']['DRY']['OFF'].keys():
+                    self.hvac_fan_speeds.append(key)
         if self.hvac_mode == "Auto":
-            for key in hvac_state.attributes['constraints']['ON']['AUTO']['ON'].keys():
-                self.hvac_fan_speeds.append(key)
+            if "ON" in hvac_state.attributes['constraints']['ON']['AUTO'].keys():
+                for key in hvac_state.attributes['constraints']['ON']['AUTO']['ON'].keys():
+                    self.hvac_fan_speeds.append(key)
+            else:
+                for key in hvac_state.attributes['constraints']['ON']['AUTO']['OFF'].keys():
+                    self.hvac_fan_speeds.append(key)
 
     ### Power can be either On or Off ###
     def set_hvac_power(self, power):
