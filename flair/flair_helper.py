@@ -17,7 +17,6 @@ class FlairSession:
 
     client_id = ''
     client_secret = ''
-    bearer_token = ''
     structures = []
     structure_ids = []
     vents = []
@@ -35,23 +34,11 @@ class FlairHelper:
             return None
         else:
             self.client = make_client(SESSION.client_id, SESSION.client_secret, 'https://api.flair.co/')
-            self._authorize()
             self.discover_structures()
             self.discover_vents()
             self.discover_pucks()
             self.discover_rooms()
             self.discover_hvac_units()
-
-    def _authorize(self):
-        headers = {
-        'Content-Type': 'application/x-www-form-urlencoded'
-        }
-        response = requests.post('https://api.flair.co/oauth/token?client_id=' + SESSION.client_id + '&client_secret=' + SESSION.client_secret +
-        '&scope=thermostats.view+vents.view+vents.edit+pucks.view+pucks.edit+structures.view+structures.edit&grant_type=client_credentials', headers=headers)
-        output = response.json()
-        self.response_status = response.status_code
-        response.raise_for_status()
-        SESSION.bearer_token = output['access_token']
 
     def structures(self):
         return SESSION.structures
@@ -100,36 +87,12 @@ class FlairHelper:
             vent.refresh()
 
     def vent_current_reading(self, id):
-        headers = {
-        'Authorization': 'Bearer ' + SESSION.bearer_token
-        }
-        response = requests.get('https://api.flair.co/api/vents/' + id + '/current-reading', headers=headers)
-        output = response.json()
-        try:
-            error = output['errors'][0]['title']
-            if error == 'invalid_token':
-                self._authorize()
-                self.vent_current_reading(id)
-            else:
-                return None
-        except:
-            return output
+        output = self.client.get('vents', id + '/current-reading')
+        return output.attributes
 
     def puck_light_level(self, id):
-        headers = {
-        'Authorization': 'Bearer ' + SESSION.bearer_token
-        }
-        response = requests.get('https://api.flair.co/api/pucks/' + id + '/current-reading', headers=headers)
-        output = response.json()
-        try:
-            error = output['errors'][0]['title']
-            if error == 'invalid_token':
-                self._authorize()
-                self.puck_light_level(id)
-            else:
-                return None
-        except:
-            return output
+        output = self.client.get('pucks', id + '/current-reading')
+        return output.attributes
 
     def discover_pucks(self):
         pucks = []
