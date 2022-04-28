@@ -20,12 +20,13 @@ class Puck(object):
         self.voltage = puck_state.attributes['voltage']
         self.is_active = puck_state.attributes['inactive'] == False
         try:
-            self.light_level = puck_light_level['data']['attributes']['light']
+            self.light_level = puck_light_level['light']
         except TypeError as error:
             self.light_level_available = False
             print(f"Flair Servers returned empty light level value: {error}")
         else:
             self.light_level_available = True
+
 
 
 
