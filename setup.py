@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="hass-flair-helper",
-    version="0.1.5",
+    version="0.1.6",
     author="Robert Drinovac",
     author_email="unlisted@gmail.com",
     description="A Python library for home-assistant-flair to help utilize the Flair Python API ",
