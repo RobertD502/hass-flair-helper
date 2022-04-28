@@ -18,8 +18,8 @@ class Vent(object):
         self.rssi = vent_state.attributes['current-rssi']
         try:
             vent_current_reading = self.api.vent_current_reading(self.vent_id)
-            self.duct_temp = vent_current_reading['data']['attributes']['duct-temperature-c']
-            self.duct_pressure = vent_current_reading['data']['attributes']['duct-pressure']
+            self.duct_temp = vent_current_reading['duct-temperature-c']
+            self.duct_pressure = vent_current_reading['duct-pressure']
         except:
             return None
 
