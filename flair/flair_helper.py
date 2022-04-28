@@ -87,12 +87,22 @@ class FlairHelper:
             vent.refresh()
 
     def vent_current_reading(self, id):
-        output = self.client.get('vents', id + '/current-reading')
-        return output.attributes
+        try:
+            output = self.client.get('vents', id + '/current-reading')
+            return output.attributes
+        except ApiError:
+            self.client.oauth_token()
+            output = self.client.get('vents', id + '/current-reading')
+            return output.attributes
 
     def puck_light_level(self, id):
-        output = self.client.get('pucks', id + '/current-reading')
-        return output.attributes
+        try:
+            output = self.client.get('pucks', id + '/current-reading')
+            return output.attributes
+        except ApiError:
+            self.client.oauth_token()
+            output = self.client.get('pucks', id + '/current-reading')
+            return output.attributes
 
     def discover_pucks(self):
         pucks = []
@@ -139,33 +149,61 @@ class FlairHelper:
             hvac_unit.refresh()
 
     def refresh_attributes(self, resource_type, id):
-        return self.client.get(resource_type, id)
+        try:
+            return self.client.get(resource_type, id)
+        except ApiError:
+            self.client.oauth_token()
+            return self.client.get(resource_type, id)
+
+
 
     def structure_related_to_room(self, resource_type, id):
-        return self.client.get(resource_type, id)
+        try:
+            return self.client.get(resource_type, id)
+        except ApiError:
+            self.client.oauth_token()
+            return self.client.get(resource_type, id)
 
     def get_schedules(self, id):
         try:
             current_structure = self.client.get('structures', id)
             return current_structure.get_rel('schedules')
-        except:
-            return None
+        except ApiError:
+            self.client.oauth_token()
+            current_structure = self.client.get('structures', id)
+            return current_structure.get_rel('schedules')
 
     def control_vent(self, vent, resource_type, attributes, relationships):
         id = vent.vent_id
-        self.client.update(resource_type, id, attributes, relationships)
+        try:
+            self.client.update(resource_type, id, attributes, relationships)
+        except ApiError:
+            self.client.oauth_token()
+            self.client.update(resource_type, id, attributes, relationships)
 
     def control_structure(self, structure, resource_type, attributes, relationships):
         id = structure.structure_id
-        self.client.update(resource_type, id, attributes, relationships)
+        try:
+            self.client.update(resource_type, id, attributes, relationships)
+        except ApiError:
+            self.client.oauth_token()
+            self.client.update(resource_type, id, attributes, relationships)
 
     def control_room(self, room, resource_type, attributes, relationships):
         id = room.room_id
-        self.client.update(resource_type, id, attributes, relationships)
+        try:
+            self.client.update(resource_type, id, attributes, relationships)
+        except ApiError:
+            self.client.oauth_token()
+            self.client.update(resource_type, id, attributes, relationships)
 
     def control_hvac(self, hvac, resource_type, attributes, relationships):
         id = hvac.hvac_id
-        self.client.update(resource_type, id, attributes, relationships)
+        try:
+            self.client.update(resource_type, id, attributes, relationships)
+        except ApiError:
+            self.client.oauth_token()
+            self.client.update(resource_type, id, attributes, relationships)
 
     def get_all_structures(self):
         return SESSION.structures
