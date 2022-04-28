@@ -172,6 +172,8 @@ class FlairHelper:
             self.client.oauth_token()
             current_structure = self.client.get('structures', id)
             return current_structure.get_rel('schedules')
+        except EmptyBodyException:
+            pass
 
     def control_vent(self, vent, resource_type, attributes, relationships):
         id = vent.vent_id
