@@ -90,19 +90,25 @@ class FlairHelper:
         try:
             output = self.client.get('vents', id + '/current-reading')
             return output.attributes
-        except ApiError:
-            self.client.oauth_token()
-            output = self.client.get('vents', id + '/current-reading')
-            return output.attributes
+        except ApiError as err:
+            if err.status_code == 401:
+                self.client.oauth_token()
+                output = self.client.get('vents', id + '/current-reading')
+                return output.attributes
+            else:
+                raise
 
     def puck_light_level(self, id):
         try:
             output = self.client.get('pucks', id + '/current-reading')
             return output.attributes
-        except ApiError:
-            self.client.oauth_token()
-            output = self.client.get('pucks', id + '/current-reading')
-            return output.attributes
+        except ApiError as err:
+            if err.status_code == 401:
+                self.client.oauth_token()
+                output = self.client.get('pucks', id + '/current-reading')
+                return output.attributes
+            else:
+                raise
 
     def discover_pucks(self):
         pucks = []
@@ -151,61 +157,83 @@ class FlairHelper:
     def refresh_attributes(self, resource_type, id):
         try:
             return self.client.get(resource_type, id)
-        except ApiError:
-            self.client.oauth_token()
-            return self.client.get(resource_type, id)
+        except ApiError as err:
+            if err.status_code == 401:
+                self.client.oauth_token()
+                return self.client.get(resource_type, id)
+            else:
+                raise
 
 
 
     def structure_related_to_room(self, resource_type, id):
         try:
             return self.client.get(resource_type, id)
-        except ApiError:
-            self.client.oauth_token()
-            return self.client.get(resource_type, id)
+        except ApiError as err:
+            if err.status_code == 401:
+                self.client.oauth_token()
+                return self.client.get(resource_type, id)
+            else:
+                raise
 
     def get_schedules(self, id):
         try:
             current_structure = self.client.get('structures', id)
             return current_structure.get_rel('schedules')
-        except ApiError:
-            self.client.oauth_token()
-            current_structure = self.client.get('structures', id)
-            return current_structure.get_rel('schedules')
+        except ApiError as err:
+            if err.status_code == 401:
+                self.client.oauth_token()
+                current_structure = self.client.get('structures', id)
+                return current_structure.get_rel('schedules')
+            else:
+                raise
         except EmptyBodyException:
             pass
+
 
     def control_vent(self, vent, resource_type, attributes, relationships):
         id = vent.vent_id
         try:
             self.client.update(resource_type, id, attributes, relationships)
-        except ApiError:
-            self.client.oauth_token()
-            self.client.update(resource_type, id, attributes, relationships)
+        except ApiError as err:
+            if err.status_code == 401:
+                self.client.oauth_token()
+                self.client.update(resource_type, id, attributes, relationships)
+            else:
+                raise
 
     def control_structure(self, structure, resource_type, attributes, relationships):
         id = structure.structure_id
         try:
             self.client.update(resource_type, id, attributes, relationships)
-        except ApiError:
-            self.client.oauth_token()
-            self.client.update(resource_type, id, attributes, relationships)
+        except ApiError as err:
+            if err.status_code == 401:
+                self.client.oauth_token()
+                self.client.update(resource_type, id, attributes, relationships)
+            else:
+                raise
 
     def control_room(self, room, resource_type, attributes, relationships):
         id = room.room_id
         try:
             self.client.update(resource_type, id, attributes, relationships)
-        except ApiError:
-            self.client.oauth_token()
-            self.client.update(resource_type, id, attributes, relationships)
+        except ApiError as err:
+            if err.status_code == 401:
+                self.client.oauth_token()
+                self.client.update(resource_type, id, attributes, relationships)
+            else:
+                raise
 
     def control_hvac(self, hvac, resource_type, attributes, relationships):
         id = hvac.hvac_id
         try:
             self.client.update(resource_type, id, attributes, relationships)
-        except ApiError:
-            self.client.oauth_token()
-            self.client.update(resource_type, id, attributes, relationships)
+        except ApiError as err:
+            if err.status_code == 401:
+                self.client.oauth_token()
+                self.client.update(resource_type, id, attributes, relationships)
+            else:
+                raise
 
     def get_all_structures(self):
         return SESSION.structures
