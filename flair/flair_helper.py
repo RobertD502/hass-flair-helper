@@ -3,7 +3,7 @@ import time
 import requests
 import json
 import collections
-from flair_api import make_client, EmptyBodyException, ApiError
+from hass_flair_api import make_client, EmptyBodyException, ApiError
 
 from flair.structures.structure import Structure
 from flair.vents.vent import Vent
